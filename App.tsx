@@ -91,7 +91,7 @@ export default function App() {
 
     try {
       // Re-create instance to ensure latest key is used
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || process.env.API_KEY });
       const imagePart = await fileToGenerativePart(imageFile);
 
       let operation = await ai.models.generateVideos({
@@ -115,7 +115,7 @@ export default function App() {
 
       if (operation.response?.generatedVideos?.[0]?.video?.uri) {
         const downloadLink = operation.response.generatedVideos[0].video.uri;
-        const videoResponse = await fetch(`${downloadLink}&key=${process.env.API_KEY}`);
+        const videoResponse = await fetch(`${downloadLink}&key=${import.meta.env.VITE_GEMINI_API_KEY || process.env.API_KEY}`);
         
         if (!videoResponse.ok) {
            throw new Error(`Failed to download video: ${videoResponse.statusText}`);
