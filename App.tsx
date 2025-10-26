@@ -158,7 +158,7 @@ export default function App() {
             Feriecenter Generator
           </h1>
           <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
-            Forvandl et hvilket som helst hus til et drømmeferiecenter med Gemini's videokraft!
+            Forvandl et hvilket som helst Hus/Herregård til et drømmeferiecenter med E. Lynges Videokraft.
           </p>
         </header>
 
@@ -227,7 +227,7 @@ export default function App() {
         </main>
 
         <footer className="text-center mt-8 text-sm text-gray-500">
-            <p>Drevet af Gemini. Hostet på liveterenlangfest.dk</p>
+            <p>Drevet af E. Lynge. Bygget af Frederik og Nicklas Madsen</p>
         </footer>
       </div>
     </div>
