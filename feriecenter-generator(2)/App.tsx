@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
-import './types'; // Import types for global declarations
 
 const loadingMessages = [
   "Kontakter arkitekterne...",
@@ -33,28 +32,10 @@ const Loader: React.FC<{ message: string }> = ({ message }) => (
   </div>
 );
 
-const ApiKeyManager: React.FC<{ onKeySelected: () => void }> = ({ onKeySelected }) => (
-  <div className="flex flex-col items-center justify-center text-center p-6 bg-gray-800 rounded-lg shadow-lg max-w-md mx-auto">
-    <h2 className="text-2xl font-bold mb-4 text-cyan-400">API Nøgle påkrævet</h2>
-    <p className="mb-6 text-gray-300">
-      For at generere videoer med Veo, skal du vælge en API-nøgle.
-      Dette sikrer, at du er klar over de potentielle omkostninger.
-    </p>
-    <button
-      onClick={onKeySelected}
-      className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105 shadow-lg"
-    >
-      Vælg API Nøgle
-    </button>
-    <p className="mt-4 text-xs text-gray-400">
-      Ved at fortsætte accepterer du, at der kan være omkostninger forbundet med API-kald.
-      Læs mere om priser på <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="underline hover:text-cyan-300">ai.google.dev/gemini-api/docs/billing</a>.
-    </p>
-  </div>
-);
+// ApiKeyManager component removed - API key is now handled via environment variables
 
 export default function App() {
-  const [isKeySelected, setIsKeySelected] = useState(false);
+  const [isKeySelected, setIsKeySelected] = useState(true);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -63,13 +44,7 @@ export default function App() {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const checkApiKey = async () => {
-      const hasKey = await window.aistudio.hasSelectedApiKey();
-      setIsKeySelected(hasKey);
-    };
-    checkApiKey();
-  }, []);
+  // Removed AI Studio dependency - API key is now handled via environment variables
 
   useEffect(() => {
     // FIX: Replaced NodeJS.Timeout with ReturnType<typeof setInterval> for browser compatibility.
@@ -86,11 +61,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [isLoading]);
 
-  const handleSelectKey = async () => {
-    await window.aistudio.openSelectKey();
-    // Optimistically assume key selection is successful to avoid race conditions.
-    setIsKeySelected(true);
-  };
+  // Removed AI Studio dependency - API key is now handled via environment variables
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -160,8 +131,7 @@ export default function App() {
       console.error(e);
       let errorMessage = e.message || "En ukendt fejl opstod.";
       if (errorMessage.includes("Requested entity was not found.")) {
-          errorMessage = "Din API nøgle er muligvis ugyldig. Prøv venligst at vælge den igen.";
-          setIsKeySelected(false); // Force re-selection
+          errorMessage = "Din API nøgle er muligvis ugyldig. Tjek dine environment variabler.";
       }
       setError(errorMessage);
     } finally {
@@ -193,9 +163,7 @@ export default function App() {
         </header>
 
         <main className="bg-gray-800 rounded-xl shadow-2xl p-6 min-h-[500px] flex flex-col items-center justify-center">
-          {!isKeySelected ? (
-            <ApiKeyManager onKeySelected={handleSelectKey} />
-          ) : isLoading ? (
+          {isLoading ? (
             <Loader message={loadingMessage} />
           ) : videoUrl ? (
             <div className="w-full text-center">
