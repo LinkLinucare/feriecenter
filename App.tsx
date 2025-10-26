@@ -151,8 +151,20 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-4xl mx-auto">
+    <div 
+      className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-4 sm:p-6 lg:p-8 relative"
+      style={{
+        backgroundImage: 'url(./615461399.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <div 
+        className="absolute inset-0 bg-gray-900" 
+        style={{ opacity: 0.85 }}
+      ></div>
+      <div className="w-full max-w-4xl mx-auto relative z-10">
         <header className="text-center mb-8">
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
             Feriecenter Generator
