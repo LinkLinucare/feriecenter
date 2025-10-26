@@ -90,8 +90,22 @@ export default function App() {
     setLoadingMessage(loadingMessages[0]);
 
     try {
+      // Debug: Check what API key values we have
+      const viteApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      const processApiKey = process.env.API_KEY;
+      const finalApiKey = viteApiKey || processApiKey;
+      
+      console.log('Debug - Vite API Key:', viteApiKey ? 'EXISTS' : 'MISSING');
+      console.log('Debug - Process API Key:', processApiKey ? 'EXISTS' : 'MISSING');
+      console.log('Debug - Final API Key:', finalApiKey ? 'EXISTS' : 'MISSING');
+      console.log('Debug - Build time env check:', (window as any).__GEMINI_API_KEY_DEBUG__);
+      
+      if (!finalApiKey) {
+        throw new Error('No API key found. Make sure GEMINI_API_KEY is set in Coolify secrets.');
+      }
+      
       // Re-create instance to ensure latest key is used
-      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: finalApiKey });
       const imagePart = await fileToGenerativePart(imageFile);
 
       let operation = await ai.models.generateVideos({
@@ -115,7 +129,7 @@ export default function App() {
 
       if (operation.response?.generatedVideos?.[0]?.video?.uri) {
         const downloadLink = operation.response.generatedVideos[0].video.uri;
-        const videoResponse = await fetch(`${downloadLink}&key=${import.meta.env.VITE_GEMINI_API_KEY || process.env.API_KEY}`);
+        const videoResponse = await fetch(`${downloadLink}&key=${finalApiKey}`);
         
         if (!videoResponse.ok) {
            throw new Error(`Failed to download video: ${videoResponse.statusText}`);

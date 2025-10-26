@@ -13,7 +13,9 @@ export default defineConfig(({ mode }) => {
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'import.meta.env.VITE_GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
+        'import.meta.env.VITE_GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+        // Debug: Let's also expose the raw env for debugging
+        '__GEMINI_API_KEY_DEBUG__': JSON.stringify(env.GEMINI_API_KEY ? 'SET' : 'NOT_SET')
       },
       resolve: {
         alias: {
